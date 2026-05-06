@@ -23,6 +23,7 @@
         }
         .login-header .icon { font-size: 2.5rem; margin-bottom: .5rem; }
         .form-control:focus { border-color: #1D9E75; box-shadow: 0 0 0 .25rem rgba(29,158,117,.25); }
+        .form-select:focus { border-color: #1D9E75; box-shadow: 0 0 0 .25rem rgba(29,158,117,.25); }
         .btn-login {
             background: #1D9E75; color: #fff; width: 100%;
             padding: .75rem; font-weight: 600; border: none; border-radius: 8px;
@@ -51,18 +52,24 @@
                     <label class="form-label fw-semibold">Email</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                        <input type="email" name="email" class="form-control"
-                               value="{{ old('email') }}" placeholder="staff@gimnasio.com"
+                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                               value="{{ old('email') }}" placeholder="admin@gimnasio.com"
                                required autofocus>
                     </div>
+                    @error('email')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
                 </div>
                 <div class="mb-4">
                     <label class="form-label fw-semibold">Contraseña</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                        <input type="password" name="password" class="form-control"
+                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
                                placeholder="••••••••" required>
                     </div>
+                    @error('password')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
                 </div>
                 <button type="submit" class="btn btn-login">
                     <i class="bi bi-box-arrow-in-right me-2"></i>Ingresar
