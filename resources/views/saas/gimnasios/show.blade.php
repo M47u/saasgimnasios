@@ -16,44 +16,114 @@ $suscripcion = $gimnasio->empresa?->suscripcionActiva;
             <span class="badge bg-{{ $badgeMap[$gimnasio->estado] ?? 'secondary' }} rounded-pill fs-6">
 {{-- Credenciales del admin (si es nuevo) --}}
 @if(session('admin_credentials'))
-<div class="alert alert-success border-0 shadow-sm mb-4 alert-dismissible fade show" role="alert">
-    <div class="d-flex align-items-start gap-3">
-        <div class="text-success fs-5">
-            <i class="bi bi-check-circle-fill"></i>
-        </div>
-        <div class="flex-grow-1">
-            <div class="fw-semibold mb-2">Usuario administrador creado</div>
-            <div class="row g-3 small">
-                <div class="col-md-6">
-                    <div class="text-muted">Email:</div>
-                    <div class="font-monospace bg-light px-2 py-1 rounded" style="font-size: 0.85rem;">
-                        {{ session('admin_credentials.email') }}
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="text-muted">Contraseña temporal:</div>
-                    <div class="font-monospace bg-light px-2 py-1 rounded d-flex align-items-center gap-2" style="font-size: 0.85rem;">
-                        <span id="password-text">{{ session('admin_credentials.password') }}</span>
-                        <button class="btn btn-sm btn-link p-0" type="button" onclick="copyPassword()">
-                            <i class="bi bi-clipboard"></i>
-                        </button>
-                    </div>
+<div class="mb-4">
+    <div class="card border-0 shadow-sm bg-gradient" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+        <div class="card-body p-0">
+            <!-- Success Header -->
+            <div class="px-4 py-3" style="background-color: rgba(255,255,255,0.1);">
+                <div class="d-flex align-items-center gap-2 mb-0">
+                    <i class="bi bi-check-circle-fill text-white fs-5"></i>
+                    <h6 class="mb-0 text-white fw-semibold">Usuario administrador creado</h6>
                 </div>
             </div>
-            <div class="text-muted small mt-2 mb-0">
-                <i class="bi bi-info-circle me-1"></i>
-                Comparte estas credenciales con el administrador del gimnasio. Se recomienda cambiar la contraseña en el primer ingreso.
+
+            <!-- Content -->
+            <div class="px-4 py-4">
+                <!-- Email Sent Notice -->
+                <div class="alert alert-light border-0 mb-4 p-3" style="background-color: rgba(255,255,255,0.95);">
+                    <div class="d-flex gap-2">
+                        <div class="text-primary flex-shrink-0 mt-1">
+                            <i class="bi bi-envelope"></i>
+                        </div>
+                        <div>
+                            <div class="fw-semibold text-dark small">Email enviado</div>
+                            <div class="text-muted small mb-0">
+                                Se ha enviado un email a <strong>{{ session('admin_credentials.email') }}</strong> con las credenciales de acceso. El administrador debe revisar su bandeja de entrada (incluyendo la carpeta de spam).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Credentials Grid -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="d-block small text-white-50 fw-semibold mb-2">
+                            <i class="bi bi-at"></i> Email
+                        </label>
+                        <div class="input-group" style="height: 40px;">
+                            <input type="text" class="form-control fw-monospace" value="{{ session('admin_credentials.email') }}" readonly>
+                            <button class="btn btn-outline-light" type="button" onclick="copyField(this)">
+                                <i class="bi bi-clipboard"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="d-block small text-white-50 fw-semibold mb-2">
+                            <i class="bi bi-key"></i> Contraseña temporal
+                        </label>
+                        <div class="input-group" style="height: 40px;">
+                            <input type="text" class="form-control fw-monospace" id="password-text" value="{{ session('admin_credentials.password') }}" readonly>
+                            <button class="btn btn-outline-light" type="button" onclick="copyField(this)">
+                                <i class="bi bi-clipboard"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Note -->
+                <div class="d-flex gap-2 p-3 rounded-2" style="background-color: rgba(255,255,255,0.1);">
+                    <div class="text-white-50 flex-shrink-0">
+                        <i class="bi bi-info-circle"></i>
+                    </div>
+                    <div class="small text-white-50 mb-0">
+                        <strong>Importante:</strong> La contraseña es temporal y debe cambiarla en el primer ingreso por seguridad.
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 
+<style>
+    .input-group .form-control {
+        background-color: rgba(255, 255, 255, 0.95) !important;
+        color: #111 !important;
+        font-size: 0.85rem !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    }
+
+    .input-group .form-control:focus {
+        background-color: white !important;
+        border-color: white !important;
+        box-shadow: none !important;
+    }
+
+    .input-group .btn-outline-light {
+        border-color: rgba(255, 255, 255, 0.3) !important;
+        color: rgba(255, 255, 255, 0.7) !important;
+        transition: all 0.2s;
+    }
+
+    .input-group .btn-outline-light:hover {
+        background-color: rgba(255, 255, 255, 0.15) !important;
+        border-color: rgba(255, 255, 255, 0.5) !important;
+        color: white !important;
+    }
+</style>
+
 <script>
-    function copyPassword() {
-        const password = document.getElementById('password-text').textContent;
-        navigator.clipboard.writeText(password).then(() => {
-            alert('Contraseña copiada al portapapeles');
+    function copyField(button) {
+        const input = button.previousElementSibling;
+        const value = input.value;
+        navigator.clipboard.writeText(value).then(() => {
+            const icon = button.querySelector('i');
+            const originalClass = icon.className;
+            icon.className = 'bi bi-check2';
+            button.classList.add('btn-light');
+            setTimeout(() => {
+                icon.className = originalClass;
+                button.classList.remove('btn-light');
+            }, 1500);
         });
     }
 </script>
