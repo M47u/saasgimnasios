@@ -43,16 +43,30 @@
         <i class="bi bi-lightning-charge-fill me-2"></i>
         {{ auth('gym')->user()?->gimnasio?->nombre ?? 'Panel Gimnasio' }}
     </span>
-    <div class="d-flex align-items-center gap-3">
-        <span class="text-white-50 small">
-            {{ auth('gym')->user()?->nombre_completo ?? '' }}
-        </span>
-        <form method="POST" action="{{ route('gym.logout') }}" class="m-0">
-            @csrf
-            <button class="btn btn-sm btn-outline-light">
-                <i class="bi bi-box-arrow-right"></i> Salir
+    <div class="d-flex align-items-center">
+        <div class="dropdown">
+            <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle me-1"></i>
+                {{ auth('gym')->user()?->nombre_completo ?? '' }}
             </button>
-        </form>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <a class="dropdown-item" href="{{ route('gym.password.change') }}">
+                        <i class="bi bi-key me-2"></i> Cambiar contraseña
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <form method="POST" action="{{ route('gym.logout') }}" class="m-0">
+                        @csrf
+                        <button type="submit" class="dropdown-item text-danger">
+                            <i class="bi bi-box-arrow-right me-2"></i> Salir
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 

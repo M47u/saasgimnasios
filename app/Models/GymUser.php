@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,18 +10,19 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class GymUser extends Authenticatable
 {
-    use Notifiable;
+    use HasFactory, Notifiable;
 
     protected $fillable = [
         'gimnasio_id', 'nombre', 'apellido',
-        'email', 'password', 'rol', 'activo',
+        'email', 'password', 'rol', 'activo', 'must_change_password',
     ];
 
     protected $hidden = ['password', 'remember_token'];
 
     protected $casts = [
-        'activo'    => 'boolean',
-        'last_login' => 'datetime',
+        'activo'               => 'boolean',
+        'must_change_password' => 'boolean',
+        'last_login'           => 'datetime',
     ];
 
     public function gimnasio(): BelongsTo

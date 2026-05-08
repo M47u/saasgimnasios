@@ -94,13 +94,14 @@ class SaasGimnasioController extends Controller
 
             $passwordTemporal = Str::random(12);
             $adminGym = GymUser::create([
-                'gimnasio_id' => $gimnasio->id,
-                'nombre' => $gimnasio->nombre,
-                'apellido' => 'Admin',
-                'email' => $data['email_admin'],
-                'password' => bcrypt($passwordTemporal),
-                'rol' => 'admin',
-                'activo' => true,
+                'gimnasio_id'          => $gimnasio->id,
+                'nombre'               => $gimnasio->nombre,
+                'apellido'             => 'Admin',
+                'email'                => $data['email_admin'],
+                'password'             => bcrypt($passwordTemporal),
+                'rol'                  => 'admin',
+                'activo'               => true,
+                'must_change_password' => true,
             ]);
 
             return [

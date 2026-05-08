@@ -46,7 +46,7 @@ class GymLoginController extends Controller
         if ($usuarios->count() === 1) {
             Auth::guard('gym')->login($usuarioValido);
             $request->session()->regenerate();
-            return redirect()->intended(route('gym.dashboard'));
+            return $this->redirectAfterLogin($usuarioValido);
         }
 
         // Si hay múltiples usuarios con este email, mostrar selector de gimnasios
@@ -80,7 +80,7 @@ class GymLoginController extends Controller
 
         Auth::guard('gym')->login($user);
         $request->session()->regenerate();
-        return redirect()->intended(route('gym.dashboard'));
+        return $this->redirectAfterLogin($user);
     }
 
     public function logout(Request $request)
@@ -89,5 +89,15 @@ class GymLoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('gym.login');
+    }
+
+    private function redirectAfterLogin(\App\Models\GymUser $user): \Illuminate\Http\RedirectResponse
+    {
+        if ($user->must_change_password) {
+            return redirect()->route('gym.password.change')
+                ->with('warning', 'Debes cambiar tu contraseña antes de continuar.');
+        }
+
+        return redirect()->intended(route('gym.dashboard'));
     }
 }

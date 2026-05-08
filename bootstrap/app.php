@@ -12,9 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'auth.saas'   => \App\Http\Middleware\SaasMiddleware::class,
-            'auth.gym'    => \App\Http\Middleware\GymMiddleware::class,
-            'auth.member' => \App\Http\Middleware\MemberMiddleware::class,
+            'auth.saas'                  => \App\Http\Middleware\SaasMiddleware::class,
+            'auth.gym'                   => \App\Http\Middleware\GymMiddleware::class,
+            'auth.member'                => \App\Http\Middleware\MemberMiddleware::class,
+            'gym.force-password-change'  => \App\Http\Middleware\GymForcePasswordChangeMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

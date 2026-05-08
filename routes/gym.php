@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Gym\GymLoginController;
 use App\Http\Controllers\Gym\GymController;
+use App\Http\Controllers\Gym\GymPasswordController;
 
 Route::prefix('gym')->name('gym.')->group(function () {
 
@@ -12,6 +13,13 @@ Route::prefix('gym')->name('gym.')->group(function () {
     Route::post('logout', [GymLoginController::class, 'logout'])->name('logout');
 
     Route::middleware('auth.gym')->group(function () {
-        Route::get('dashboard', [GymController::class, 'dashboard'])->name('dashboard');
+        // Cambio de contraseña — accesible aunque must_change_password sea true
+        Route::get('change-password', [GymPasswordController::class, 'show'])->name('password.change');
+        Route::put('change-password', [GymPasswordController::class, 'update'])->name('password.update');
+
+        // Rutas bloqueadas hasta que el usuario haya cambiado su contraseña
+        Route::middleware('gym.force-password-change')->group(function () {
+            Route::get('dashboard', [GymController::class, 'dashboard'])->name('dashboard');
+        });
     });
 });
