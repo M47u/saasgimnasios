@@ -82,6 +82,16 @@ class Gimnasio extends Model
         return $this->suscripcionActiva()?->plan;
     }
 
+    public function scopeOperativos($query): void
+    {
+        $query->where('estado', '!=', 'cancelado');
+    }
+
+    public function scopeCancelados($query): void
+    {
+        $query->where('estado', 'cancelado');
+    }
+
     public function limiteSociosAlcanzado(): bool
     {
         $plan = $this->plan();

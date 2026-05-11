@@ -12,9 +12,14 @@ $badgeMap = ['activo' => 'success', 'suspendido' => 'danger', 'trial' => 'warnin
         <h4 class="mb-0 fw-bold">Gimnasios</h4>
         <p class="text-muted mb-0">Gestión de todos los gimnasios registrados</p>
     </div>
-    <a href="{{ route('saas.gimnasios.create') }}" class="btn btn-saas">
-        <i class="bi bi-plus-lg me-1"></i> Nuevo gimnasio
-    </a>
+    <div class="d-flex gap-2">
+        <a href="{{ route('saas.gimnasios.eliminados') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-trash3 me-1"></i> Eliminados
+        </a>
+        <a href="{{ route('saas.gimnasios.create') }}" class="btn btn-saas">
+            <i class="bi bi-plus-lg me-1"></i> Nuevo gimnasio
+        </a>
+    </div>
 </div>
 
 {{-- Filtros --}}

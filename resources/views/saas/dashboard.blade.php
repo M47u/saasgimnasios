@@ -20,10 +20,13 @@
                     <i class="bi bi-building fs-3" style="color:#534AB7"></i>
                 </div>
                 <div>
-                    <div class="text-muted small">Total gimnasios</div>
+                    <div class="text-muted small">Total gimnasios operativos</div>
                     <div class="fs-2 fw-bold lh-1">{{ $totalGimnasios }}</div>
                     <div class="text-muted" style="font-size:.72rem">
                         {{ $gimnasiosTrial }} en trial &middot; {{ $gimnasiosSuspendidos }} suspendidos
+                        @if($gimnasiosCancelados > 0)
+                            &middot; <a href="{{ route('saas.gimnasios.eliminados') }}" class="text-danger text-decoration-none">{{ $gimnasiosCancelados }} eliminados</a>
+                        @endif
                     </div>
                 </div>
             </div>

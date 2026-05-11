@@ -11,11 +11,12 @@ class SaasController extends Controller
 {
     public function dashboard()
     {
-        $totalGimnasios       = Gimnasio::count();
-        $gimnasiosActivos     = Gimnasio::where('estado', 'activo')->count();
-        $gimnasiosTrial       = Gimnasio::where('estado', 'trial')->count();
-        $gimnasiosSuspendidos = Gimnasio::where('estado', 'suspendido')->count();
-        $totalSocios          = Socio::count();
+        $totalGimnasios        = Gimnasio::operativos()->count();
+        $gimnasiosActivos      = Gimnasio::where('estado', 'activo')->count();
+        $gimnasiosTrial        = Gimnasio::where('estado', 'trial')->count();
+        $gimnasiosSuspendidos  = Gimnasio::where('estado', 'suspendido')->count();
+        $gimnasiosCancelados   = Gimnasio::cancelados()->count();
+        $totalSocios           = Socio::count();
 
         $suscripcionesVencen = Suscripcion::whereIn('estado', ['activa', 'trial'])
             ->where('fin', '>=', today())
@@ -23,7 +24,8 @@ class SaasController extends Controller
             ->with(['empresa.gimnasios', 'plan'])
             ->get();
 
-        $gimnasiosRecientes = Gimnasio::with(['empresa.suscripcionActiva.plan'])
+        $gimnasiosRecientes = Gimnasio::operativos()
+            ->with(['empresa.suscripcionActiva.plan'])
             ->withCount(['socios' => fn($q) => $q->where('estado', 'activo')])
             ->latest()
             ->limit(5)
@@ -34,6 +36,7 @@ class SaasController extends Controller
             'gimnasiosActivos',
             'gimnasiosTrial',
             'gimnasiosSuspendidos',
+            'gimnasiosCancelados',
             'totalSocios',
             'suscripcionesVencen',
             'gimnasiosRecientes',

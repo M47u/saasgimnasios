@@ -148,7 +148,14 @@ $suscripcion = $gimnasio->empresa?->suscripcionActiva;
                     <i class="bi bi-play-circle me-1"></i> Reactivar
                 </button>
             </form>
-        @else
+            <form method="POST" action="{{ route('saas.gimnasios.cancelar', $gimnasio->id) }}"
+                  onsubmit="return confirm('¿Eliminar lógicamente «{{ $gimnasio->nombre }}»? El gimnasio pasará a la lista de eliminados y podrá restaurarse.')">
+                @csrf
+                <button class="btn btn-danger">
+                    <i class="bi bi-trash3 me-1"></i> Eliminar
+                </button>
+            </form>
+        @elseif($gimnasio->estado !== 'cancelado')
             <form method="POST" action="{{ route('saas.gimnasios.suspender', $gimnasio->id) }}"
                   onsubmit="return confirm('¿Suspender este gimnasio?')">
                 @csrf

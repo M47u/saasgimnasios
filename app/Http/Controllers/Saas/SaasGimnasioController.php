@@ -18,7 +18,8 @@ class SaasGimnasioController extends Controller
 {
     public function index(Request $request)
     {
-        $gimnasios = Gimnasio::with(['empresa.suscripcionActiva.plan'])
+        $gimnasios = Gimnasio::operativos()
+            ->with(['empresa.suscripcionActiva.plan'])
             ->withCount(['socios' => fn ($q) => $q->where('estado', 'activo')])
             ->when($request->estado, fn ($q, $v) => $q->where('estado', $v))
             ->when($request->buscar, fn ($q, $v) => $q->where('nombre', 'like', "%{$v}%"))
@@ -27,6 +28,19 @@ class SaasGimnasioController extends Controller
             ->withQueryString();
 
         return view('saas.gimnasios.index', compact('gimnasios'));
+    }
+
+    public function eliminados(Request $request)
+    {
+        $gimnasios = Gimnasio::cancelados()
+            ->with(['empresa.suscripcionActiva.plan'])
+            ->withCount(['socios' => fn ($q) => $q->where('estado', 'activo')])
+            ->when($request->buscar, fn ($q, $v) => $q->where('nombre', 'like', "%{$v}%"))
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('saas.gimnasios.eliminados', compact('gimnasios'));
     }
 
     public function create()
@@ -178,7 +192,7 @@ class SaasGimnasioController extends Controller
 
     public function suspender(int $id)
     {
-        $gimnasio = Gimnasio::findOrFail($id);
+        $gimnasio = Gimnasio::operativos()->findOrFail($id);
         $gimnasio->update(['estado' => 'suspendido']);
 
         return back()->with('success', "Gimnasio «{$gimnasio->nombre}» suspendido.");
@@ -186,10 +200,35 @@ class SaasGimnasioController extends Controller
 
     public function reactivar(int $id)
     {
-        $gimnasio = Gimnasio::findOrFail($id);
+        $gimnasio = Gimnasio::operativos()->findOrFail($id);
         $gimnasio->update(['estado' => 'activo']);
 
         return back()->with('success', "Gimnasio «{$gimnasio->nombre}» reactivado.");
+    }
+
+    public function cancelar(int $id)
+    {
+        $gimnasio = Gimnasio::operativos()->findOrFail($id);
+
+        if ($gimnasio->estado !== 'suspendido') {
+            return back()->with('error', 'Solo se puede eliminar un gimnasio suspendido.');
+        }
+
+        $gimnasio->update(['estado' => 'cancelado']);
+
+        return redirect()
+            ->route('saas.gimnasios.index')
+            ->with('success', "Gimnasio «{$gimnasio->nombre}» eliminado lógicamente.");
+    }
+
+    public function restaurar(int $id)
+    {
+        $gimnasio = Gimnasio::cancelados()->findOrFail($id);
+        $gimnasio->update(['estado' => 'suspendido']);
+
+        return redirect()
+            ->route('saas.gimnasios.show', $gimnasio->id)
+            ->with('success', "Gimnasio «{$gimnasio->nombre}» restaurado a estado suspendido.");
     }
 
     public function asignarSuscripcion(Request $request, int $id)
