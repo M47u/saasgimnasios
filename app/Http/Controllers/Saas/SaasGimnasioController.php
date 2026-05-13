@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class SaasGimnasioController extends Controller
 {
@@ -55,7 +56,12 @@ class SaasGimnasioController extends Controller
     {
         $data = $request->validate([
             'nombre' => 'required|string|max:255',
-            'email' => 'nullable|email|max:255',
+            'email' => [
+                'nullable',
+                'email',
+                'max:255',
+                Rule::unique('gimnasios', 'email')->where('estado', '!=', 'cancelado'),
+            ],
             'telefono' => 'nullable|string|max:50',
             'direccion' => 'nullable|string|max:255',
             'ciudad' => 'nullable|string|max:100',
@@ -176,7 +182,14 @@ class SaasGimnasioController extends Controller
 
         $data = $request->validate([
             'nombre' => 'required|string|max:255',
-            'email' => 'nullable|email|max:255',
+            'email' => [
+                'nullable',
+                'email',
+                'max:255',
+                Rule::unique('gimnasios', 'email')
+                    ->ignore($gimnasio->id)
+                    ->where('estado', '!=', 'cancelado'),
+            ],
             'telefono' => 'nullable|string|max:50',
             'direccion' => 'nullable|string|max:255',
             'ciudad' => 'nullable|string|max:100',
