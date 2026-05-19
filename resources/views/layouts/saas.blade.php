@@ -69,7 +69,10 @@
            class="nav-link {{ request()->routeIs('saas.gimnasios*') ? 'active' : '' }}">
             <i class="bi bi-building"></i> Gimnasios
         </a>
-        <a href="#" class="nav-link"><i class="bi bi-credit-card"></i> Suscripciones</a>
+        <a href="{{ route('saas.suscripciones.index') }}"
+           class="nav-link {{ request()->routeIs('saas.suscripciones*') ? 'active' : '' }}">
+            <i class="bi bi-credit-card"></i> Suscripciones
+        </a>
         <a href="#" class="nav-link"><i class="bi bi-tags"></i> Planes</a>
     </nav>
 

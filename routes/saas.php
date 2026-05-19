@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Saas\SaasLoginController;
 use App\Http\Controllers\Saas\SaasController;
 use App\Http\Controllers\Saas\SaasGimnasioController;
+use App\Http\Controllers\Saas\SaasSuscripcionController;
 
 Route::prefix('saas')->name('saas.')->group(function () {
 
@@ -26,5 +27,11 @@ Route::prefix('saas')->name('saas.')->group(function () {
         Route::post('gimnasios/{id}/cancelar',     [SaasGimnasioController::class, 'cancelar'])->name('gimnasios.cancelar');
         Route::post('gimnasios/{id}/restaurar',    [SaasGimnasioController::class, 'restaurar'])->name('gimnasios.restaurar');
         Route::post('gimnasios/{id}/suscripcion',  [SaasGimnasioController::class, 'asignarSuscripcion'])->name('gimnasios.suscripcion');
+
+        Route::get('suscripciones',                      [SaasSuscripcionController::class, 'index'])->name('suscripciones.index');
+        Route::get('suscripciones/{id}',                 [SaasSuscripcionController::class, 'show'])->name('suscripciones.show');
+        Route::post('suscripciones/{id}/renovar',        [SaasSuscripcionController::class, 'renovar'])->name('suscripciones.renovar');
+        Route::post('suscripciones/{id}/suspender',      [SaasSuscripcionController::class, 'suspender'])->name('suscripciones.suspender');
+        Route::post('suscripciones/{id}/cancelar',       [SaasSuscripcionController::class, 'cancelar'])->name('suscripciones.cancelar');
     });
 });
