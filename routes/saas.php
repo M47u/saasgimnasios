@@ -5,6 +5,7 @@ use App\Http\Controllers\Saas\SaasLoginController;
 use App\Http\Controllers\Saas\SaasController;
 use App\Http\Controllers\Saas\SaasGimnasioController;
 use App\Http\Controllers\Saas\SaasSuscripcionController;
+use App\Http\Controllers\Saas\SaasPlanController;
 
 Route::prefix('saas')->name('saas.')->group(function () {
 
@@ -33,5 +34,13 @@ Route::prefix('saas')->name('saas.')->group(function () {
         Route::post('suscripciones/{id}/renovar',        [SaasSuscripcionController::class, 'renovar'])->name('suscripciones.renovar');
         Route::post('suscripciones/{id}/suspender',      [SaasSuscripcionController::class, 'suspender'])->name('suscripciones.suspender');
         Route::post('suscripciones/{id}/cancelar',       [SaasSuscripcionController::class, 'cancelar'])->name('suscripciones.cancelar');
+
+        Route::get('planes',                  [SaasPlanController::class, 'index'])->name('planes.index');
+        Route::get('planes/crear',            [SaasPlanController::class, 'create'])->name('planes.create');
+        Route::post('planes',                 [SaasPlanController::class, 'store'])->name('planes.store');
+        Route::get('planes/{id}/editar',      [SaasPlanController::class, 'edit'])->name('planes.edit');
+        Route::put('planes/{id}',             [SaasPlanController::class, 'update'])->name('planes.update');
+        Route::post('planes/{id}/toggle',     [SaasPlanController::class, 'toggleActivo'])->name('planes.toggle');
+        Route::delete('planes/{id}',          [SaasPlanController::class, 'destroy'])->name('planes.destroy');
     });
 });

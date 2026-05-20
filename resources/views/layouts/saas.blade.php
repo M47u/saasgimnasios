@@ -73,7 +73,10 @@
            class="nav-link {{ request()->routeIs('saas.suscripciones*') ? 'active' : '' }}">
             <i class="bi bi-credit-card"></i> Suscripciones
         </a>
-        <a href="#" class="nav-link"><i class="bi bi-tags"></i> Planes</a>
+        <a href="{{ route('saas.planes.index') }}"
+           class="nav-link {{ request()->routeIs('saas.planes*') ? 'active' : '' }}">
+            <i class="bi bi-tags"></i> Planes
+        </a>
     </nav>
 
     <span class="nav-section">Soporte</span>
