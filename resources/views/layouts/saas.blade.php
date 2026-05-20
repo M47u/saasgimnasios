@@ -77,6 +77,10 @@
            class="nav-link {{ request()->routeIs('saas.planes*') ? 'active' : '' }}">
             <i class="bi bi-tags"></i> Planes
         </a>
+        <a href="{{ route('saas.empresas.index') }}"
+           class="nav-link {{ request()->routeIs('saas.empresas*') ? 'active' : '' }}">
+            <i class="bi bi-briefcase"></i> Empresas
+        </a>
     </nav>
 
     <span class="nav-section">Soporte</span>

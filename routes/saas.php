@@ -6,6 +6,7 @@ use App\Http\Controllers\Saas\SaasController;
 use App\Http\Controllers\Saas\SaasGimnasioController;
 use App\Http\Controllers\Saas\SaasSuscripcionController;
 use App\Http\Controllers\Saas\SaasPlanController;
+use App\Http\Controllers\Saas\SaasEmpresaController;
 
 Route::prefix('saas')->name('saas.')->group(function () {
 
@@ -42,5 +43,11 @@ Route::prefix('saas')->name('saas.')->group(function () {
         Route::put('planes/{id}',             [SaasPlanController::class, 'update'])->name('planes.update');
         Route::post('planes/{id}/toggle',     [SaasPlanController::class, 'toggleActivo'])->name('planes.toggle');
         Route::delete('planes/{id}',          [SaasPlanController::class, 'destroy'])->name('planes.destroy');
+
+        Route::get('empresas',               [SaasEmpresaController::class, 'index'])->name('empresas.index');
+        Route::get('empresas/{id}',          [SaasEmpresaController::class, 'show'])->name('empresas.show');
+        Route::get('empresas/{id}/editar',   [SaasEmpresaController::class, 'edit'])->name('empresas.edit');
+        Route::put('empresas/{id}',          [SaasEmpresaController::class, 'update'])->name('empresas.update');
+        Route::delete('empresas/{id}',       [SaasEmpresaController::class, 'destroy'])->name('empresas.destroy');
     });
 });
